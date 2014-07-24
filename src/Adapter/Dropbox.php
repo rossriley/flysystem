@@ -283,6 +283,7 @@ class Dropbox extends AbstractAdapter
 
         $result = array_merge($result, Util::map($object, static::$resultMap));
         $result['type'] = $object['is_dir'] ? 'dir' : 'file';
+        $result['path'] = ltrim($result['path'], '/');
 
         return $result;
     }
