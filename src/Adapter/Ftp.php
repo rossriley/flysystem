@@ -162,6 +162,11 @@ class Ftp extends AbstractFtpAdapter
         return $this->write($path, $contents, $config);
     }
 
+    public function updateStream($path, $resource, $config = null) {
+        return $this->writeStream($path, $resource, $config);
+    }
+
+
     public function rename($path, $newpath)
     {
         return ftp_rename($this->getConnection(), $path, $newpath);
