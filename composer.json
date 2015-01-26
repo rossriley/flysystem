@@ -1,6 +1,6 @@
 {
     "name": "league/flysystem",
-    "description": "Many filesystems, one API.",
+    "description": "Many filesystems, one API. - This fork maintains PHP 5.3 compatibility while tracking upstream",
     "keywords": [
         "filesystem", "files", "storage", "dropbox", "aws",
         "s3", "ftp", "sftp", "remote", "webdav", "file systems", "cloud",
@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.3.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
