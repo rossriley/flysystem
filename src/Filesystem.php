@@ -15,7 +15,6 @@ use League\Flysystem\Plugin\PluginNotFoundException;
  */
 class Filesystem implements FilesystemInterface
 {
-    use PluggableTrait;
 
     /**
      * @var AdapterInterface
@@ -26,6 +25,11 @@ class Filesystem implements FilesystemInterface
      * @var Config
      */
     protected $config;
+    
+    /**
+     * @var array
+     */
+    protected $plugins = array();
 
     /**
      * Constructor.
@@ -72,7 +76,7 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function write($path, $contents, array $config = [])
+    public function write($path, $contents, array $config = array())
     {
         $path = Util::normalizePath($path);
         $this->assertAbsent($path);
@@ -84,7 +88,7 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function writeStream($path, $resource, array $config = [])
+    public function writeStream($path, $resource, array $config = array())
     {
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
@@ -110,7 +114,7 @@ class Filesystem implements FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function put($path, $contents, array $config = [])
+    public function put($path, $contents, array $config = array())
     {
         $path = Util::normalizePath($path);
 
@@ -130,7 +134,7 @@ class Filesystem implements FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function putStream($path, $resource, array $config = [])
+    public function putStream($path, $resource, array $config = array())
     {
         $path = Util::normalizePath($path);
 
@@ -176,7 +180,7 @@ class Filesystem implements FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function update($path, $contents, array $config = [])
+    public function update($path, $contents, array $config = array())
     {
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
@@ -197,7 +201,7 @@ class Filesystem implements FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function updateStream($path, $resource, array $config = [])
+    public function updateStream($path, $resource, array $config = array())
     {
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
@@ -329,7 +333,7 @@ class Filesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function createDir($dirname, array $config = [])
+    public function createDir($dirname, array $config = array())
     {
         $dirname = Util::normalizePath($dirname);
         $config = $this->prepareConfig($config);
@@ -569,5 +573,58 @@ class Filesystem implements FilesystemInterface
                 .'::'.$method
             );
         }
+    }
+    
+       /**
+     * Register a plugin.
+     *
+     * @param PluginInterface $plugin
+     *
+     * @return $this
+     */
+    public function addPlugin(PluginInterface $plugin)
+    {
+        $this->plugins[$plugin->getMethod()] = $plugin;
+
+        return $this;
+    }
+
+    /**
+     * Register a plugin.
+     *
+     * @param string $method
+     *
+     * @throws LogicException
+     *
+     * @return PluginInterface $plugin
+     */
+    protected function findPlugin($method)
+    {
+        if (! isset($this->plugins[$method])) {
+            throw new PluginNotFoundException('Plugin not found for method: '.$method);
+        }
+
+        if (! method_exists($this->plugins[$method], 'handle')) {
+            throw new LogicException(get_class($this->plugins[$method]).' does not have a handle method.');
+        }
+
+        return $this->plugins[$method];
+    }
+
+    /**
+     * Invoke a plugin by method name.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    protected function invokePlugin($method, array $arguments, FilesystemInterface $filesystem)
+    {
+        $plugin = $this->findPlugin($method);
+        $plugin->setFilesystem($filesystem);
+        $callback = array($plugin, 'handle');
+
+        return call_user_func_array($callback, $arguments);
     }
 }
