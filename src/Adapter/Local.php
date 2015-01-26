@@ -14,10 +14,10 @@ use SplFileInfo;
 
 class Local extends AbstractAdapter
 {
-    protected static $permissions = [
+    protected static $permissions = array(
         'public' => 0744,
         'private' => 0700,
-    ];
+    );
 
     /**
      * @var string
@@ -205,11 +205,11 @@ class Local extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $result = [];
+        $result = array();
         $location = $this->applyPathPrefix($directory).$this->pathSeparator;
 
         if (! is_dir($location)) {
-            return [];
+            return array();
         }
 
         $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
@@ -252,7 +252,7 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $finfo = new Finfo(FILEINFO_MIME_TYPE);
 
-        return ['mimetype' => $finfo->file($location)];
+        return array('mimetype' => $finfo->file($location));
     }
 
     /**
@@ -298,7 +298,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return ['path' => $dirname, 'type' => 'dir'];
+        return array('path' => $dirname, 'type' => 'dir');
     }
 
     /**
@@ -335,11 +335,11 @@ class Local extends AbstractAdapter
      */
     protected function normalizeFileInfo(SplFileInfo $file)
     {
-        $normalized = [
+        $normalized = array(
             'type' => $file->getType(),
             'path' => $this->getFilePath($file),
             'timestamp' => $file->getMTime(),
-        ];
+        );
 
         if ($normalized['type'] === 'file') {
             $normalized['size'] = $file->getSize();
