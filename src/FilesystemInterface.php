@@ -95,7 +95,7 @@ interface FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function write($path, $contents, array $config = []);
+    public function write($path, $contents, array $config = array());
 
     /**
      * Write a new file using a stream.
@@ -106,7 +106,7 @@ interface FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function writeStream($path, $resource, array $config = []);
+    public function writeStream($path, $resource, array $config = array());
 
     /**
      * Update a file.
@@ -117,7 +117,7 @@ interface FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function update($path, $contents, array $config = []);
+    public function update($path, $contents, array $config = array());
 
     /**
      * Update a file using a stream.
@@ -128,7 +128,7 @@ interface FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function updateStream($path, $resource, array $config = []);
+    public function updateStream($path, $resource, array $config = array());
 
     /**
      * Rename a file.
@@ -176,7 +176,7 @@ interface FilesystemInterface
      *
      * @return bool
      */
-    public function createDir($dirname, array $config = []);
+    public function createDir($dirname, array $config = array());
 
     /**
      * Set the visibility for a file.
@@ -199,7 +199,7 @@ interface FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function put($path, $contents, array $config = []);
+    public function put($path, $contents, array $config = array());
 
     /**
      * Create a file or update if exists using a stream.
@@ -210,7 +210,7 @@ interface FilesystemInterface
      *
      * @return bool success boolean
      */
-    public function putStream($path, $resource, array $config = []);
+    public function putStream($path, $resource, array $config = array());
 
     /**
      * Read and delete a file.
