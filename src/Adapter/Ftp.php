@@ -10,7 +10,6 @@ use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
 {
-    use StreamedCopyTrait;
 
     /**
      * @var int
@@ -20,13 +19,13 @@ class Ftp extends AbstractFtpAdapter
     /**
      * @var array
      */
-    protected $configurable = [
+    protected $configurable = array(
         'host', 'port', 'username',
         'password', 'ssl', 'timeout',
         'root', 'permPrivate',
         'permPublic', 'passive',
         'transferMode',
-    ];
+    );
 
     /**
      * Set the transfer mode.
@@ -267,7 +266,7 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
-        return ['path' => $dirname];
+        return array('path' => $dirname);
     }
 
     /**
@@ -386,9 +385,36 @@ class Ftp extends AbstractFtpAdapter
         $listing = ftp_rawlist($this->getConnection(), '-lna '.$directory, $recursive);
 
         if ($listing === false) {
-            return [];
+            return array();
         }
 
         return $this->normalizeListing($listing, $directory);
     }
+    
+    
+    /**
+     * Copy a file.
+     *
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return bool
+     */
+    public function copy($path, $newpath)
+    {
+        $response = $this->readStream($path);
+
+        if ($response === false || ! is_resource($response['stream'])) {
+            return false;
+        }
+
+        $result = $this->writeStream($newpath, $response['stream'], new Config());
+
+        if (is_resource($response['stream'])) {
+            fclose($response['stream']);
+        }
+
+        return (boolean) $result;
+    }
+
 }
