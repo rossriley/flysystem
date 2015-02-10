@@ -64,13 +64,13 @@ class HandlerTests extends ProphecyTestCase
 
     public function getterProvider()
     {
-        return [
-            ['getTimestamp', 123],
-            ['getMimetype', 'text/plain'],
-            ['getVisibility', 'private'],
-            ['getMetadata', ['some' => 'metadata']],
-            ['getSize', 123],
-        ];
+        return array(
+            array('getTimestamp', 123),
+            array('getMimetype', 'text/plain'),
+            array('getVisibility', 'private'),
+            array('getMetadata', array('some' => 'metadata')),
+            array('getSize', 123),
+        );
     }
 
     /**
@@ -92,7 +92,7 @@ class HandlerTests extends ProphecyTestCase
 
     public function testFileIsFile()
     {
-        $response = ['type' => 'file'];
+        $response = array('type' => 'file');
         $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
         $prophecy->getMetadata('path.txt')->willReturn($response);
         $filesystem = $prophecy->reveal();
@@ -103,7 +103,7 @@ class HandlerTests extends ProphecyTestCase
 
     public function testFileIsDir()
     {
-        $response = ['type' => 'file'];
+        $response = array('type' => 'file');
         $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
         $prophecy->getMetadata('path.txt')->willReturn($response);
         $filesystem = $prophecy->reveal();
@@ -134,7 +134,7 @@ class HandlerTests extends ProphecyTestCase
     public function testDirListContents()
     {
         $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
-        $prophecy->listContents('path', true)->willReturn($listing = ['listing']);
+        $prophecy->listContents('path', true)->willReturn($listing = array('listing'));
         $filesystem = $prophecy->reveal();
         $dir = new Directory(null, 'path');
         $dir->setFilesystem($filesystem);

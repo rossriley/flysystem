@@ -150,7 +150,7 @@ class FilesystemTests extends ProphecyTestCase
         $path = 'path.txt';
         $output = '__CONTENTS__';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->read($path)->willReturn(['contents' => $output]);
+        $this->prophecy->read($path)->willReturn(array('contents' => $output));
         $this->prophecy->delete($path)->willReturn(true);
         $response = $this->filesystem->readAndDelete($path);
         $this->assertEquals($output, $response);
@@ -170,7 +170,7 @@ class FilesystemTests extends ProphecyTestCase
         $path = 'path.txt';
         $output = '__CONTENTS__';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->read($path)->willReturn(['contents' => $output]);
+        $this->prophecy->read($path)->willReturn(array('contents' => $output));
         $response = $this->filesystem->read($path);
         $this->assertEquals($response, $output);
     }
@@ -180,7 +180,7 @@ class FilesystemTests extends ProphecyTestCase
         $path = 'path.txt';
         $output = '__CONTENTS__';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->readStream($path)->willReturn(['stream' => $output]);
+        $this->prophecy->readStream($path)->willReturn(array('stream' => $output));
         $response = $this->filesystem->readStream($path);
         $this->assertEquals($response, $output);
     }
@@ -231,26 +231,26 @@ class FilesystemTests extends ProphecyTestCase
 
     public function testCreateDir()
     {
-        $this->prophecy->createDir('dirname', $this->config)->willReturn(['path' => 'dirname', 'type' => 'dir']);
+        $this->prophecy->createDir('dirname', $this->config)->willReturn(array('path' => 'dirname', 'type' => 'dir'));
         $output = $this->filesystem->createDir('dirname');
         $this->assertTrue($output);
     }
 
     public function metaGetterProvider()
     {
-        return [
-            ['getSize', 1234],
-            ['getVisibility', 'public'],
-            ['getMimetype', 'text/plain'],
-            ['getTimestamp', 2345],
-            ['getMetadata', [
+        return array(
+            array('getSize', 1234),
+            array('getVisibility', 'public'),
+            array('getMimetype', 'text/plain'),
+            array('getTimestamp', 2345),
+            array('getMetadata', array(
                 'path' => 'success.txt',
                 'size' => 1234,
                 'visibility' => 'public',
                 'mimetype' => 'text/plain',
                 'timestamp' => 2345,
-            ]],
-        ];
+            )),
+        );
     }
 
     /**
@@ -260,13 +260,13 @@ class FilesystemTests extends ProphecyTestCase
     {
         $path = 'success.txt';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->{$method}($path)->willReturn([
+        $this->prophecy->{$method}($path)->willReturn(array(
             'path' => $path,
             'size' => 1234,
             'visibility' => 'public',
             'mimetype' => 'text/plain',
             'timestamp' => 2345,
-        ]);
+        ));
         $output = $this->filesystem->{$method}($path);
         $this->assertEquals($value, $output);
     }
@@ -301,7 +301,7 @@ class FilesystemTests extends ProphecyTestCase
     {
         $path = 'path.txt';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->setVisibility($path, 'public')->willReturn(['path' => $path, 'visibility' => 'public']);
+        $this->prophecy->setVisibility($path, 'public')->willReturn(array('path' => $path, 'visibility' => 'public'));
         $output = $this->filesystem->setVisibility($path, 'public');
         $this->assertTrue($output);
     }
@@ -319,10 +319,10 @@ class FilesystemTests extends ProphecyTestCase
     {
         $path = 'path.txt';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->getMetadata($path)->willReturn([
+        $this->prophecy->getMetadata($path)->willReturn(array(
             'path' => $path,
             'type' => 'file',
-        ]);
+        ));
 
         $output = $this->filesystem->get($path);
         $this->assertInstanceOf('League\Flysystem\File', $output);
@@ -332,10 +332,10 @@ class FilesystemTests extends ProphecyTestCase
     {
         $path = 'path';
         $this->prophecy->has($path)->willReturn(true);
-        $this->prophecy->getMetadata($path)->willReturn([
+        $this->prophecy->getMetadata($path)->willReturn(array(
             'path' => $path,
             'type' => 'dir',
-        ]);
+        ));
 
         $output = $this->filesystem->get($path);
         $this->assertInstanceOf('League\Flysystem\Directory', $output);
@@ -343,15 +343,15 @@ class FilesystemTests extends ProphecyTestCase
 
     public function testListContents()
     {
-        $rawListing = [
-           ['path' => 'other_root/file.txt'],
-           ['path' => 'valid/to_deep/file.txt'],
-           ['path' => 'valid/file.txt'],
-        ];
+        $rawListing = array(
+           array('path' => 'other_root/file.txt'),
+           array('path' => 'valid/to_deep/file.txt'),
+           array('path' => 'valid/file.txt'),
+        );
 
-        $expected = [
+        $expected = array(
             Util::pathinfo('valid/file.txt'),
-        ];
+        );
 
         $this->prophecy->listContents('valid', false)->willReturn($rawListing);
         $output = $this->filesystem->listContents('valid', false);

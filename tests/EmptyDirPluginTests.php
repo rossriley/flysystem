@@ -11,12 +11,12 @@ class EmptyDirPluginTests extends PHPUnit_Framework_TestCase
         $plugin = new EmptyDir();
         $this->assertEquals('emptyDir', $plugin->getMethod());
         $plugin->setFilesystem($filesystem);
-        $filesystem->shouldReceive('listContents')->with('dirname', false)->andReturn([
-           ['type' => 'dir', 'path' => 'dirname/dir'],
-           ['type' => 'file', 'path' => 'dirname/file.txt'],
-           ['type' => 'dir', 'path' => 'dirname/another_dir'],
-           ['type' => 'file', 'path' => 'dirname/another_file.txt'],
-        ]);
+        $filesystem->shouldReceive('listContents')->with('dirname', false)->andReturn(array(
+           array('type' => 'dir', 'path' => 'dirname/dir'),
+           array('type' => 'file', 'path' => 'dirname/file.txt'),
+           array('type' => 'dir', 'path' => 'dirname/another_dir'),
+           array('type' => 'file', 'path' => 'dirname/another_file.txt'),
+        ));
 
         $filesystem->shouldReceive('delete')->with('dirname/file.txt');
         $filesystem->shouldReceive('delete')->with('dirname/another_file.txt');
