@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem",
+    "name": "rossriley/flysystem53",
     "description": "Many filesystems, one API. - This fork maintains PHP 5.3 compatibility while tracking upstream",
     "keywords": [
         "filesystem", "files", "storage", "dropbox", "aws",
@@ -35,6 +35,9 @@
         "psr-4": {
             "League\\Flysystem\\Stub\\": "stub/"
         }
+    },
+    "replace": {
+      "league/flysystem": "~1.1"
     },
     "suggest": {
         "ext-fileinfo": "Required for MimeType",
