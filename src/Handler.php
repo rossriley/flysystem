@@ -95,4 +95,20 @@ abstract class Handler
     {
         return $this->path;
     }
+
+    /**
+     * Plugins pass-through.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    public function __call($method, array $arguments)
+    {
+        array_unshift($arguments, $this->path);
+        $callback = array($this->filesystem, $method);
+
+        return call_user_func_array($callback, $arguments);
+    }
 }
